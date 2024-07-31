@@ -2,10 +2,10 @@
 
 .App {
   font-family: "Montserrat", sans-serif;
-  background-color: rgb(250, 245, 255);
+  background-color: rgb(255, 249, 249);
   min-height: 100vh;
 }
 
-* {
-  box-sizing: border-box;
+.Main {
+  padding-top: 83px;
 }

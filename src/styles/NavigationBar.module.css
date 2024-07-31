@@ -7,17 +7,24 @@
   color: rgb(0, 0, 0); /* Text color */
 }
 
-.NavigationBar .NavLink {
+.NavLink {
   display: flex;
   align-items: center;
-  color: rgb(0, 0, 0) !important; /* Text color with !important */
-  margin-top: 10px;
-  margin-bottom: 10px;
+  color: rgb(0, 0, 0); /* Text color */
+  text-decoration: none; /* Remove underline */
   padding: 0 10px; /* Adjust spacing as needed */
 }
 
-.NavigationBar .NavLink .material-symbols-outlined {
+.NavLink .material-symbols-outlined {
+  margin-right: 5px; /* Space between icon and text */
   vertical-align: middle; /* Align icons vertically */
+  font-size: 20px; /* Adjust icon size as needed */
   line-height: 0; /* Reset line-height for the icon */
-  color: rgb(26, 26, 26) !important; /* Set the icon color with !important */
+  color: royalblue; /* Set the icon color */
+}
+
+/* Optional: Add styling for active links */
+.NavLink.active {
+  font-weight: bold; /* Example of active link styling */
+  color: royalblue; /* Example of active link color */
 }
