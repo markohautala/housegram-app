@@ -1,0 +1,23 @@
+.NavigationBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px;
+  background-color: white; /* Background color */
+  color: rgb(0, 0, 0); /* Text color */
+}
+
+.NavigationBar .NavLink {
+  display: flex;
+  align-items: center;
+  color: rgb(0, 0, 0) !important; /* Text color with !important */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0 10px; /* Adjust spacing as needed */
+}
+
+.NavigationBar .NavLink .material-symbols-outlined {
+  vertical-align: middle; /* Align icons vertically */
+  line-height: 0; /* Reset line-height for the icon */
+  color: rgb(26, 26, 26) !important; /* Set the icon color with !important */
+}
