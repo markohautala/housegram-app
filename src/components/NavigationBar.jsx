@@ -26,7 +26,7 @@ function NavigationBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <NavLink to="/" className={styles.NavLink} end>
+            <NavLink to="/" className={styles.NavLink}>
               <span className="material-symbols-outlined">home</span> Home
             </NavLink>
             <NavLink to="/login" className={styles.NavLink}>

@@ -27,4 +27,5 @@
 .NavLink.active {
   font-weight: bold; /* Example of active link styling */
   color: royalblue; /* Example of active link color */
+  border-bottom: 2px solid royalblue; /* Add a border to show active state */
 }
