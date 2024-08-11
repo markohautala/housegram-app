@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null); // State for handling errors
-
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate(); // For redirecting the user
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,19 +21,24 @@ function SignupForm() {
     }
 
     try {
-      await axios.post("/dj-rest-auth/registration/", {
-        username,
-        password1: password,
-        password2: confirmPassword,
-      });
-      navigate("/login"); // Redirect to login page upon successful signup
+      // The axios request with withCredentials
+      await axios.post(
+        "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/registration/",
+        {
+          username,
+          password1: password,
+          password2: confirmPassword,
+        },
+        { withCredentials: true }  // Ensure credentials are included
+      );
+      console.log("Account created successfully");
+
+      // Redirect to the login page after successful registration
+      navigate("/login");
     } catch (error) {
       setError(error.response?.data); // Capture error messages
+      console.error("There was an error creating the account!", error.response);
     }
-  };
-
-  const handleLogin = () => {
-    navigate("/login"); // Navigate to login page when clicking the button
   };
 
   return (
@@ -99,7 +103,7 @@ function SignupForm() {
           </form>
 
           <button
-            onClick={handleLogin}
+            onClick={() => navigate("/login")}
             className="btn btn-white mt-3 w-100"
             style={{ backgroundColor: "white", color: "black", border: "1px solid black" }}
           >
