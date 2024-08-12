@@ -1,12 +1,11 @@
-// src/components/NavigationBar.jsx
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import logo2 from "../assets/logo2.png"; // Ensure this path is correct
+import logo2 from "../assets/logo2.png";
 import styles from "../styles/NavigationBar.module.css";
 import { NavLink } from "react-router-dom";
-import { useAuth } from '../context/AuthContext'; // Import useAuth from App.js
+import { useAuth } from '../context/AuthContext';
 
 function NavigationBar() {
   const { isAuthenticated, logout } = useAuth();
@@ -35,9 +34,22 @@ function NavigationBar() {
                 <NavLink to="/" className={styles.NavLink}>
                   <span className="material-symbols-outlined">home</span> Home
                 </NavLink>
-                <Nav.Link onClick={logout} className={styles.NavLink}>
+                <NavLink to="/upload" className={styles.NavLink}>
+                  <span className="material-symbols-outlined">add_photo_alternate</span> Upload
+                </NavLink>
+                <NavLink to="/profile" className={styles.NavLink}>
+                  <span className="material-symbols-outlined">account_box</span> Profile
+                </NavLink>
+                <NavLink
+                  to="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    logout();
+                  }}
+                  className={styles.NavLink}
+                >
                   <span className="material-symbols-outlined">logout</span> Logout
-                </Nav.Link>
+                </NavLink>
               </>
             ) : (
               <>

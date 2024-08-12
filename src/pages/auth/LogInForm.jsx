@@ -34,17 +34,17 @@ function LogInForm() {
     setLoading(true);
 
     try {
-      await axios.post(
+      const response = await axios.post(
         "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/login/",
         signInData,
         { withCredentials: true }
       );
-      console.log("Login successful");
-      setLoading(false);
-      login(); // Update authentication state
+      const token = response.data.key; // Adjust based on your API's response structure
+      login(token); // Update authentication state and store token
       navigate("/"); // Redirect to the home page after successful login
     } catch (error) {
       setError(error.response?.data);
+    } finally {
       setLoading(false);
     }
   };
