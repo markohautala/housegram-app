@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import loadingGif from "../../assets/loading.gif"; // Import the loading GIF
+import styles from "../../styles/SignInUpForm.module.css"; // Import the CSS module
 
 function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null); // State for handling errors
+  const [loading, setLoading] = useState(false); // State for loading
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for toggling confirm password visibility
   const navigate = useNavigate(); // For redirecting the user
@@ -15,10 +18,12 @@ function SignupForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null); // Reset error state before submission
+    setLoading(true); // Show the loader
 
     // Check if passwords match
     if (password !== confirmPassword) {
       setError({ non_field_errors: ["The passwords don't match"] });
+      setLoading(false); // Hide the loader if there's an error
       return;
     }
 
@@ -35,16 +40,26 @@ function SignupForm() {
       );
       console.log("Account created successfully");
 
-      // Redirect to the login page after successful registration
-      navigate("/login");
+      // Simulate a delay (e.g., waiting for the request to complete)
+      setTimeout(() => {
+        setLoading(false); // Hide the loader
+        navigate("/login"); // Redirect to the login page after successful registration
+      }, 2000); // Adjust the delay time as needed
+
     } catch (error) {
       setError(error.response?.data); // Capture error messages
       console.error("There was an error creating the account!", error.response);
+      setLoading(false); // Hide the loader if there's an error
     }
   };
 
   return (
-    <div className="container mt-5">
+    <div className={`container mt-5 ${styles.container}`}>
+      {loading && (
+        <div className={styles.loadingOverlay}>
+          <img src={loadingGif} alt="Loading..." className={styles.loadingSpinner} />
+        </div>
+      )}
       <div className="row justify-content-center">
         <div className="col-md-4">
           {/* Header for the signup form */}

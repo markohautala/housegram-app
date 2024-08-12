@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import loadingGif from "../../assets/loading.gif"; // Import the loading GIF
+import styles from "../../styles/SignInUpForm.module.css"; // Import the CSS module for styles
 
 function LoginPage() {
-  // Initialize signInData state to store both username and password
   const [signInData, setSignInData] = useState({
     username: "",
     password: "",
   });
-
   const [error, setError] = useState(null); // State for handling errors
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [loading, setLoading] = useState(false); // State for loading
 
   const navigate = useNavigate(); // Initialize navigate function
 
-  // Destructure username and password from signInData
   const { username, password } = signInData;
 
-  // Handle input changes and update signInData state
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignInData({
@@ -27,19 +26,25 @@ function LoginPage() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null); // Reset error state before submission
+    setLoading(true); // Show the loader
 
     try {
       // Post the signInData to the login endpoint
       await axios.post("/dj-rest-auth/login/", signInData);
       console.log("Login successful");
-      // Redirect to the home page after successful login
-      navigate("/");
+
+      // Simulate a delay (e.g., waiting for the request to complete)
+      setTimeout(() => {
+        setLoading(false); // Hide the loader
+        navigate("/"); // Redirect to the home page after successful login
+      }, 1500); // Adjust the delay time to 1500 milliseconds
+
     } catch (error) {
       setError(error.response?.data); // Capture error messages
+      setLoading(false); // Hide the loader if there's an error
     }
   };
 
@@ -49,6 +54,11 @@ function LoginPage() {
 
   return (
     <div className="container mt-5">
+      {loading && (
+        <div className={styles.loadingOverlay}>
+          <img src={loadingGif} alt="Loading..." className={styles.loadingSpinner} />
+        </div>
+      )}
       <div className="row justify-content-center">
         <div className="col-md-4">
           {/* Header for the login form */}
