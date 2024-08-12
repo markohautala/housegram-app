@@ -9,28 +9,26 @@ import { useAuth } from '../context/AuthContext';
 
 function NavigationBar() {
   const { isAuthenticated, logout } = useAuth();
-  const [expanded, setExpanded] = useState(false); // State to track the burger menu
-  const navigate = useNavigate(); // Hook for navigation
+  const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const handleNavClick = (path) => {
-    setExpanded(false); // Close the menu
-    navigate(path); // Navigate to the selected path
+    setExpanded(false);
+    navigate(path);
   };
 
   return (
     <Navbar expand="lg" className={styles.NavigationBar} fixed="top" expanded={expanded}>
       <Container>
-        <Navbar.Brand>
-          <NavLink to="/" onClick={() => setExpanded(false)}>
+        <Navbar.Brand className={styles.NavbarBrand}>
+          <NavLink to="/" onClick={() => setExpanded(false)} className={styles.BrandLink}>
             <img
               src={logo2}
               alt="logo"
               height={50}
-              style={{
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
+              className={styles.BrandLogo}
             />
+            <span className={styles.BrandText}>HOUSEGRAM</span>
           </NavLink>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")} />
@@ -52,7 +50,7 @@ function NavigationBar() {
                   onClick={(e) => {
                     e.preventDefault();
                     logout();
-                    setExpanded(false); // Close the menu after logout
+                    setExpanded(false);
                   }}
                   className={styles.NavLink}
                 >

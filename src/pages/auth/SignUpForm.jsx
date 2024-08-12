@@ -35,12 +35,18 @@ function SignupForm() {
           password1: password, // Ensure these field names match your API expectations
           password2: confirmPassword
         },
-        { withCredentials: true }
+        {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true
+        }
       );
       setLoading(false);
       navigate("/login"); // Redirect to login page after successful signup
     } catch (error) {
-      setError(error.response?.data);
+      console.error('Signup error response:', error.response);
+      setError(error.response?.data || "An error occurred");
       setLoading(false);
     }
   };

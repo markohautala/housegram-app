@@ -1,4 +1,3 @@
-/* src/styles/NavigationBar.module.css */
 .NavigationBar {
   display: flex;
   justify-content: space-between;
@@ -29,6 +28,43 @@
   font-weight: bold; /* Example of active link styling */
   color: royalblue; /* Example of active link color */
   border-bottom: 2px solid royalblue; /* Add a border to show active state */
+}
+
+/* Styles for logo and brand text */
+.NavbarBrand {
+  display: flex;
+  align-items: center;
+}
+
+.BrandLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none; /* Remove underline from the link */
+}
+
+.BrandLogo {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px; /* Spacing between logo and text */
+}
+
+.BrandText {
+  font-size: 1rem; /* Adjust font size as needed */
+  font-weight: bold; /* Make the text bold */
+  color: rgb(0, 0, 0); /* Text color */
+}
+
+/* Optional: Style for logo text on smaller screens */
+@media (max-width: 991px) {
+  .NavbarBrand {
+    flex-direction: column; /* Stack logo and text vertically */
+    text-align: center; /* Center text on smaller screens */
+  }
+
+  .BrandText {
+    font-size: 1rem; /* Adjust font size for smaller screens */
+    margin-top: 5px; /* Add margin above text */
+  }
 }
 
 /* New styles for burger mode */

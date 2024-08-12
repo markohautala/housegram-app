@@ -8,6 +8,12 @@ function Upload() {
     image: '',
   });
 
+  const [errors, setErrors] = useState({
+    title: '',
+    description: '',
+    image: '',
+  });
+
   const { title, description, image } = postData;
 
   const handleChange = (event) => {
@@ -30,6 +36,12 @@ function Upload() {
       setPostData({
         ...postData,
         image: newImageURL,
+      });
+
+      // Clear any previous image-related error
+      setErrors({
+        ...errors,
+        image: '',
       });
     }
   };
@@ -56,10 +68,46 @@ function Upload() {
     document.getElementById('image-upload').click();
   };
 
+  const validateForm = () => {
+    let isValid = true;
+    let newErrors = {
+      title: '',
+      description: '',
+      image: '',
+    };
+
+    if (!title) {
+      newErrors.title = 'Title is required';
+      isValid = false;
+    }
+
+    if (!description) {
+      newErrors.description = 'Description is required';
+      isValid = false;
+    }
+
+    if (!image) {
+      newErrors.image = 'Image is required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (validateForm()) {
+      // Handle form submission
+      console.log('Form data:', postData);
+    }
+  };
+
   return (
     <Container className="mt-5">
       <div className="card p-4" style={{ borderRadius: '10px' }}>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Row>
             <Col xs={12} md={4} className="d-flex flex-column align-items-center mb-4 mb-md-0">
               <Form.Group className="text-center">
@@ -118,6 +166,7 @@ function Upload() {
                   onChange={handleChangeImage}
                   style={{ display: 'none' }}
                 />
+                {errors.image && <Form.Text className="text-danger">{errors.image}</Form.Text>}
               </Form.Group>
             </Col>
 
@@ -130,7 +179,9 @@ function Upload() {
                   value={title}
                   onChange={handleChange}
                   placeholder="Enter a title"
+                  required
                 />
+                {errors.title && <Form.Text className="text-danger">{errors.title}</Form.Text>}
               </Form.Group>
 
               <Form.Group className="mb-3">
@@ -142,7 +193,9 @@ function Upload() {
                   value={description}
                   onChange={handleChange}
                   placeholder="Write a description"
+                  required
                 />
+                {errors.description && <Form.Text className="text-danger">{errors.description}</Form.Text>}
               </Form.Group>
 
               <Button variant="dark" type="submit">
