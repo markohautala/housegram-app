@@ -8,6 +8,8 @@ function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null); // State for handling errors
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for toggling confirm password visibility
   const navigate = useNavigate(); // For redirecting the user
 
   const handleSubmit = async (e) => {
@@ -71,31 +73,45 @@ function SignupForm() {
                 required
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 position-relative">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="form-control"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <span
+                className="material-symbols-outlined position-absolute"
+                style={{ top: "40px", right: "10px", cursor: "pointer" }}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "visibility_off" : "visibility"}
+              </span>
             </div>
-            <div className="mb-3">
+            <div className="mb-3 position-relative">
               <label htmlFor="confirmPassword" className="form-label">
                 Confirm Password
               </label>
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 className="form-control"
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
+              <span
+                className="material-symbols-outlined position-absolute"
+                style={{ top: "40px", right: "10px", cursor: "pointer" }}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? "visibility_off" : "visibility"}
+              </span>
             </div>
             <button type="submit" className="btn btn-dark w-100">
               Sign Up

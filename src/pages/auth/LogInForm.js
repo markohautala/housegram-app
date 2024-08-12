@@ -4,24 +4,40 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  // Initialize signInData state to store both username and password
+  const [signInData, setSignInData] = useState({
+    username: "",
+    password: "",
+  });
+
   const [error, setError] = useState(null); // State for handling errors
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
 
   const navigate = useNavigate(); // Initialize navigate function
 
-  const handleLogin = async (e) => {
+  // Destructure username and password from signInData
+  const { username, password } = signInData;
+
+  // Handle input changes and update signInData state
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignInData({
+      ...signInData,
+      [name]: value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null); // Reset error state before submission
 
     try {
-      // Replace this URL with your actual login endpoint
-      await axios.post("/dj-rest-auth/login/", {
-        username,
-        password,
-      });
+      // Post the signInData to the login endpoint
+      await axios.post("/dj-rest-auth/login/", signInData);
       console.log("Login successful");
-      // Handle successful login (e.g., redirect or show a success message)
+      // Redirect to the home page after successful login
+      navigate("/");
     } catch (error) {
       setError(error.response?.data); // Capture error messages
     }
@@ -47,7 +63,8 @@ function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleLogin}>
+          {/* Form submission handled by handleSubmit */}
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="username" className="form-label">
                 Username
@@ -56,23 +73,32 @@ function LoginPage() {
                 type="text"
                 className="form-control"
                 id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                name="username"
+                value={username} // Bind value to the signInData state
+                onChange={handleChange} // Handle input changes
                 required
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 position-relative">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="form-control"
                 id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={password} // Bind value to the signInData state
+                onChange={handleChange} // Handle input changes
                 required
               />
+              <span
+                className="material-symbols-outlined position-absolute"
+                style={{ top: "40px", right: "10px", cursor: "pointer" }}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "visibility_off" : "visibility"}
+              </span>
             </div>
             <button type="submit" className="btn btn-dark w-100">
               Login
