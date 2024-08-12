@@ -1,4 +1,3 @@
-// src/pages/auth/SignUpForm.js
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
@@ -32,7 +31,7 @@ function SignupForm() {
         "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/registration/",
         {
           username,
-          password1: password, // Ensure these field names match your API expectations
+          password1: password,
           password2: confirmPassword
         },
         {
@@ -43,7 +42,7 @@ function SignupForm() {
         }
       );
       setLoading(false);
-      navigate("/login"); // Redirect to login page after successful signup
+      navigate("/login");
     } catch (error) {
       console.error('Signup error response:', error.response);
       setError(error.response?.data || "An error occurred");
@@ -118,6 +117,14 @@ function SignupForm() {
             </div>
             <button type="submit" className="btn btn-dark w-100">Sign Up</button>
           </form>
+
+          <button
+            onClick={() => navigate("/login")}
+            className="btn btn-white mt-3 w-100"
+            style={{ backgroundColor: "white", color: "black", border: "1px solid black" }}
+          >
+            Already have an account? Log in
+          </button>
         </div>
       </div>
     </div>
