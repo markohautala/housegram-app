@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import loadingGif from "../../assets/loading.gif";
 import styles from "../../styles/SignInUpForm.module.css";
-import { useAuth } from "../../App"; // Import useAuth to access login method
+import { useAuth } from '../../context/AuthContext'; // Import useAuth to access login method
 
 function LogInForm() {
   const [signInData, setSignInData] = useState({

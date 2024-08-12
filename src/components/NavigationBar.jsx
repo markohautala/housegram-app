@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import logo2 from "../assets/logo2.png"; // Ensure this path is correct
 import styles from "../styles/NavigationBar.module.css";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../App"; // Import useAuth from App.js
+import { useAuth } from '../context/AuthContext'; // Import useAuth from App.js
 
 function NavigationBar() {
   const { isAuthenticated, logout } = useAuth();
