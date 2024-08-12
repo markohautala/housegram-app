@@ -1,60 +1,52 @@
+// src/pages/auth/SignUpForm.js
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import loadingGif from "../../assets/loading.gif"; // Import the loading GIF
-import styles from "../../styles/SignInUpForm.module.css"; // Import the CSS module
+import loadingGif from "../../assets/loading.gif";
+import styles from "../../styles/SignInUpForm.module.css";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null); // State for handling errors
-  const [loading, setLoading] = useState(false); // State for loading
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for toggling confirm password visibility
-  const navigate = useNavigate(); // For redirecting the user
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state before submission
-    setLoading(true); // Show the loader
+    setError(null);
+    setLoading(true);
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError({ non_field_errors: ["The passwords don't match"] });
-      setLoading(false); // Hide the loader if there's an error
+      setLoading(false);
       return;
     }
 
     try {
-      // The axios request with withCredentials
       await axios.post(
         "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/registration/",
         {
           username,
-          password1: password,
-          password2: confirmPassword,
+          password1: password, // Ensure these field names match your API expectations
+          password2: confirmPassword
         },
-        { withCredentials: true }  // Ensure credentials are included
+        { withCredentials: true }
       );
-      console.log("Account created successfully");
-
-      // Simulate a delay (e.g., waiting for the request to complete)
-      setTimeout(() => {
-        setLoading(false); // Hide the loader
-        navigate("/login"); // Redirect to the login page after successful registration
-      }, 2000); // Adjust the delay time as needed
-
+      setLoading(false);
+      navigate("/login"); // Redirect to login page after successful signup
     } catch (error) {
-      setError(error.response?.data); // Capture error messages
-      console.error("There was an error creating the account!", error.response);
-      setLoading(false); // Hide the loader if there's an error
+      setError(error.response?.data);
+      setLoading(false);
     }
   };
 
   return (
-    <div className={`container mt-5 ${styles.container}`}>
+    <div className="container mt-5">
       {loading && (
         <div className={styles.loadingOverlay}>
           <img src={loadingGif} alt="Loading..." className={styles.loadingSpinner} />
@@ -62,23 +54,17 @@ function SignupForm() {
       )}
       <div className="row justify-content-center">
         <div className="col-md-4">
-          {/* Header for the signup form */}
           <h2 className="text-center mb-4">Create an account</h2>
-
-          {/* Conditionally render the alert if there is an error */}
           {error && (
             <div className="alert alert-warning" role="alert">
               {error.non_field_errors
                 ? error.non_field_errors.join(", ")
-                : "There was an issue with your signup. Please try again."}
+                : "There was an issue with your registration. Please try again."}
             </div>
           )}
-
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="username" className="form-label">
-                Username
-              </label>
+              <label htmlFor="username" className="form-label">Username</label>
               <input
                 type="text"
                 className="form-control"
@@ -89,9 +75,7 @@ function SignupForm() {
               />
             </div>
             <div className="mb-3 position-relative">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
+              <label htmlFor="password" className="form-label">Password</label>
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control"
@@ -109,9 +93,7 @@ function SignupForm() {
               </span>
             </div>
             <div className="mb-3 position-relative">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirm Password
-              </label>
+              <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 className="form-control"
@@ -128,18 +110,8 @@ function SignupForm() {
                 {showConfirmPassword ? "visibility_off" : "visibility"}
               </span>
             </div>
-            <button type="submit" className="btn btn-dark w-100">
-              Sign Up
-            </button>
+            <button type="submit" className="btn btn-dark w-100">Sign Up</button>
           </form>
-
-          <button
-            onClick={() => navigate("/login")}
-            className="btn btn-white mt-3 w-100"
-            style={{ backgroundColor: "white", color: "black", border: "1px solid black" }}
-          >
-            Already have an account? Log in
-          </button>
         </div>
       </div>
     </div>
