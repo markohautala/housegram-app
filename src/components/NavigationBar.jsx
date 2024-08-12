@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import logo2 from "../assets/logo2.png";
 import styles from "../styles/NavigationBar.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 
 function NavigationBar() {
   const { isAuthenticated, logout } = useAuth();
+  const [expanded, setExpanded] = useState(false); // State to track the burger menu
+  const navigate = useNavigate(); // Hook for navigation
+
+  const handleNavClick = (path) => {
+    setExpanded(false); // Close the menu
+    navigate(path); // Navigate to the selected path
+  };
 
   return (
-    <Navbar expand="lg" className={styles.NavigationBar} fixed="top">
+    <Navbar expand="lg" className={styles.NavigationBar} fixed="top" expanded={expanded}>
       <Container>
         <Navbar.Brand>
-          <NavLink to="/">
+          <NavLink to="/" onClick={() => setExpanded(false)}>
             <img
               src={logo2}
               alt="logo"
@@ -26,18 +33,18 @@ function NavigationBar() {
             />
           </NavLink>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")} />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             {isAuthenticated ? (
               <>
-                <NavLink to="/" className={styles.NavLink}>
+                <NavLink to="/" className={styles.NavLink} onClick={() => handleNavClick("/")}>
                   <span className="material-symbols-outlined">home</span> Home
                 </NavLink>
-                <NavLink to="/upload" className={styles.NavLink}>
+                <NavLink to="/upload" className={styles.NavLink} onClick={() => handleNavClick("/upload")}>
                   <span className="material-symbols-outlined">add_photo_alternate</span> Upload
                 </NavLink>
-                <NavLink to="/profile" className={styles.NavLink}>
+                <NavLink to="/profile" className={styles.NavLink} onClick={() => handleNavClick("/profile")}>
                   <span className="material-symbols-outlined">account_box</span> Profile
                 </NavLink>
                 <NavLink
@@ -45,6 +52,7 @@ function NavigationBar() {
                   onClick={(e) => {
                     e.preventDefault();
                     logout();
+                    setExpanded(false); // Close the menu after logout
                   }}
                   className={styles.NavLink}
                 >
@@ -53,10 +61,10 @@ function NavigationBar() {
               </>
             ) : (
               <>
-                <NavLink to="/login" className={styles.NavLink}>
+                <NavLink to="/login" className={styles.NavLink} onClick={() => handleNavClick("/login")}>
                   <span className="material-symbols-outlined">key</span> Login
                 </NavLink>
-                <NavLink to="/create-account" className={styles.NavLink}>
+                <NavLink to="/create-account" className={styles.NavLink} onClick={() => handleNavClick("/create-account")}>
                   <span className="material-symbols-outlined">person_add</span> Create Account
                 </NavLink>
               </>

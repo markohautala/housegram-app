@@ -30,3 +30,30 @@
   color: royalblue; /* Example of active link color */
   border-bottom: 2px solid royalblue; /* Add a border to show active state */
 }
+
+/* New styles for burger mode */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background-color: white; /* Background color for burger menu */
+    border-radius: 10px; /* Rounded corners for burger menu */
+    padding: 10px; /* Padding inside the burger menu */
+  }
+
+  .NavLink {
+    padding: 10px 20px; /* Increase padding for better spacing */
+    font-size: 18px; /* Slightly larger text for better readability */
+  }
+
+  .NavLink:not(:last-child) {
+    margin-bottom: 10px; /* Add margin between items */
+  }
+
+  .navbar-toggler {
+    border: none; /* Remove border from the burger icon */
+    outline: none; /* Remove outline on focus */
+  }
+
+  .navbar-toggler-icon {
+    color: black; /* Change burger icon color */
+  }
+}
