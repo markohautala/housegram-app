@@ -1,4 +1,3 @@
-// src/pages/auth/LogInForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ function LogInForm() {
   const { login } = useAuth(); // Get the login function from AuthContext
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); // Manage loading state
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +31,7 @@ function LogInForm() {
 
     try {
       const response = await axios.post(
-        "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/login/",
+        "http://127.0.0.1:8000/dj-rest-auth/login/",
         signInData,
         {
           headers: {
@@ -88,7 +88,7 @@ function LogInForm() {
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="form-control"
                 id="password"
                 name="password"
@@ -96,11 +96,26 @@ function LogInForm() {
                 onChange={handleChange}
                 required
               />
+              <span
+                className="material-symbols-outlined position-absolute"
+                style={{ top: "40px", right: "10px", cursor: "pointer" }}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "visibility_off" : "visibility"}
+              </span>
             </div>
             <button type="submit" className="btn btn-dark w-100">
               Login
             </button>
           </form>
+
+          <button
+            onClick={() => navigate("/signup")}
+            className="btn btn-white mt-3 w-100"
+            style={{ backgroundColor: "white", color: "black", border: "1px solid black" }}
+          >
+            Create a user account
+          </button>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // Set the base URL for your API
-axios.defaults.baseURL = "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/";
+axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
 axios.defaults.withCredentials = true; // Important for handling cookies
 

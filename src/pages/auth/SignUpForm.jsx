@@ -28,7 +28,7 @@ function SignupForm() {
 
     try {
       await axios.post(
-        "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/registration/",
+        "http://127.0.0.1:8000/dj-rest-auth/registration/",
         {
           username,
           password1: password,
