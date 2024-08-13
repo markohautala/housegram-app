@@ -1,10 +1,10 @@
+// src/pages/auth/LogInForm.jsx
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import loadingGif from "../../assets/loading.gif";
-import styles from "../../styles/SignInUpForm.module.css";
 import { useAuth } from '../../context/AuthContext';
+import loadingGif from "../../assets/loading.gif";  // If you're using a loading GIF
+import styles from "../../styles/SignInUpForm.module.css"; // If you're using custom styles
 
 function LogInForm() {
   const [signInData, setSignInData] = useState({
@@ -12,11 +12,9 @@ function LogInForm() {
     password: "",
   });
   const [error, setError] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const { login } = useAuth(); // Get the login function from AuthContext
   const navigate = useNavigate();
-  const { username, password } = signInData;
+  const [loading, setLoading] = useState(false); // Manage loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,10 +27,9 @@ function LogInForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
+    setLoading(true); // Start loading
 
     try {
-      // Use the correct API endpoint and set Content-Type to application/json
       const response = await axios.post(
         "https://housegram-rest-api-de7c6ab4d6fb.herokuapp.com/dj-rest-auth/login/",
         signInData,
@@ -43,20 +40,15 @@ function LogInForm() {
           withCredentials: true
         }
       );
-      console.log("Login successful");
-      const token = response.data.key; // Adjust based on your API's response structure
-      login(token); // Update authentication state and store token
-      navigate("/"); // Redirect to the home page after successful login
+      const token = response.data.key;
+      login(token); // Store token and update auth state
+      navigate("/");
     } catch (error) {
       console.error('Login error response:', error.response?.data || error.message);
       setError(error.response?.data || "An error occurred");
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading
     }
-  };
-
-  const handleSignupRedirect = () => {
-    navigate("/create-account");
   };
 
   return (
@@ -86,7 +78,7 @@ function LogInForm() {
                 className="form-control"
                 id="username"
                 name="username"
-                value={username}
+                value={signInData.username}
                 onChange={handleChange}
                 required
               />
@@ -96,33 +88,19 @@ function LogInForm() {
                 Password
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type="password"
                 className="form-control"
                 id="password"
                 name="password"
-                value={password}
+                value={signInData.password}
                 onChange={handleChange}
                 required
               />
-              <span
-                className="material-symbols-outlined position-absolute"
-                style={{ top: "40px", right: "10px", cursor: "pointer" }}
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "visibility_off" : "visibility"}
-              </span>
             </div>
             <button type="submit" className="btn btn-dark w-100">
               Login
             </button>
           </form>
-          <button
-            onClick={handleSignupRedirect}
-            className="btn btn-white mt-3 w-100"
-            style={{ backgroundColor: "white", color: "black", border: "1px solid black" }}
-          >
-            Create an account here
-          </button>
         </div>
       </div>
     </div>

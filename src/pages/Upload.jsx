@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+// src/pages/Upload.jsx
+
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Image, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { axiosReq } from '../api/axiosDefaults';
 
 function Upload() {
   const [postData, setPostData] = useState({
@@ -15,6 +19,7 @@ function Upload() {
   });
 
   const { title, description, image } = postData;
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setPostData({
@@ -26,19 +31,15 @@ function Upload() {
   const handleChangeImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Revoke the previous object URL to free up memory
       if (image) {
         URL.revokeObjectURL(image);
       }
 
-      // Create a new object URL and update the state
-      const newImageURL = URL.createObjectURL(file);
       setPostData({
         ...postData,
-        image: newImageURL,
+        image: file,
       });
 
-      // Clear any previous image-related error
       setErrors({
         ...errors,
         image: '',
@@ -55,17 +56,10 @@ function Upload() {
       image: '',
     });
 
-    // Reset the file input value to allow re-uploading of the same file
     const fileInput = document.getElementById('image-upload');
     if (fileInput) {
       fileInput.value = '';
     }
-  };
-
-  const handleImageClick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    document.getElementById('image-upload').click();
   };
 
   const validateForm = () => {
@@ -95,14 +89,40 @@ function Upload() {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
-      // Handle form submission
-      console.log('Form data:', postData);
+      const formData = new FormData();
+      formData.append('house_title', title);
+      formData.append('description', description);
+      formData.append('house_image', image);
+
+      try {
+        const response = await axiosReq.post('/houseposts/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Form submission successful:', response.data);
+        navigate('/');
+      } catch (error) {
+        console.error('Error submitting form:', error.response?.data || error.message);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          ...error.response?.data,
+        }));
+      }
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (image) {
+        URL.revokeObjectURL(image);
+      }
+    };
+  }, [image]);
 
   return (
     <Container className="mt-5">
@@ -113,9 +133,9 @@ function Upload() {
               <Form.Group className="text-center">
                 {image ? (
                   <>
-                    <figure onClick={handleImageClick} style={{ cursor: 'pointer' }}>
+                    <figure onClick={() => document.getElementById('image-upload').click()} style={{ cursor: 'pointer' }}>
                       <Image
-                        src={image}
+                        src={URL.createObjectURL(image)}
                         rounded
                         style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                       />
@@ -124,7 +144,7 @@ function Upload() {
                       <Button
                         variant="outline-primary"
                         className="mt-2"
-                        onClick={handleImageClick}
+                        onClick={() => document.getElementById('image-upload').click()}
                       >
                         Change the image
                       </Button>
@@ -149,14 +169,15 @@ function Upload() {
                       backgroundColor: '#f8f9fa',
                       justifyContent: 'center',
                       display: 'flex',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
-                    onClick={handleImageClick}
                   >
                     <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#6c757d' }}>
                       add_photo_alternate
                     </span>
-                    <p className="mt-2 text-center" style={{ color: '#6c757d' }}>Click or tap to upload image of dream house</p>
+                    <p className="mt-2 text-center" style={{ color: '#6c757d' }}>
+                      Click or tap to upload image of dream house
+                    </p>
                   </Form.Label>
                 )}
                 <Form.Control
@@ -172,28 +193,32 @@ function Upload() {
 
             <Col xs={12} md={8}>
               <Form.Group>
-                <Form.Label>Title</Form.Label>
+                <Form.Label htmlFor="title">Title</Form.Label>
                 <Form.Control
                   type="text"
+                  id="title"
                   name="title"
                   value={title}
                   onChange={handleChange}
                   placeholder="Enter a title"
                   required
+                  autoComplete="off"
                 />
                 {errors.title && <Form.Text className="text-danger">{errors.title}</Form.Text>}
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
+                <Form.Label htmlFor="description">Description</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={3}
+                  id="description"
                   name="description"
                   value={description}
                   onChange={handleChange}
                   placeholder="Write a description"
                   required
+                  autoComplete="off"
                 />
                 {errors.description && <Form.Text className="text-danger">{errors.description}</Form.Text>}
               </Form.Group>

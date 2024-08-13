@@ -1,3 +1,4 @@
+// src/components/Routes.jsx
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import SignUpForm from '../pages/auth/SignUpForm.jsx';
